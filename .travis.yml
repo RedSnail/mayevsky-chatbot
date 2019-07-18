@@ -1,0 +1,5 @@
+deploy:
+  provider: pypi
+  user: "SomeAnonimCoder"
+  password:
+    secure: "Олег, дай травису доступ к репе!"
