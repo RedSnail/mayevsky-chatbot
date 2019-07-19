@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="mayevsky-chatbot",
-    version="0.0.5",
+    version="0.0.6",
     author="RedSnail",
     author_email="",
     description="The bot for TheBigMayevsky",
