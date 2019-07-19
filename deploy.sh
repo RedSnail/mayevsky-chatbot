@@ -1,5 +1,5 @@
 python3 -m pip install --upgrade setuptools wheel
 python3 setup.py sdist bdist_wheel
 python3 -m pip install --upgrade twine
-python3 -m twine upload dist/* --repository-url pypi.grihabor.com
+python3 -m twine upload dist/* --repository-url https://pypi.grihabor.com
 
