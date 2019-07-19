@@ -1,5 +1,9 @@
 import setuptools
 
+install_requires=[
+   'vk_api',
+]
+
 setuptools.setup(
     name="mayevsky-chatbot",
     version="0.0.6",
