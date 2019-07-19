@@ -10,3 +10,5 @@ script:
 deploy:
  provider:
     ./deploy.sh
+ on:
+    branch: master
