@@ -49,7 +49,7 @@ selecting_0_vertex = '''SELECT id, taxon, number from descriptions
                         LIMIT 1'''
 
 update_vertex_status = '''UPDATE descriptions
-                          SET status=1
+                          SET status=?
                           WHERE id=?'''
 
 update_vertex = '''UPDATE descriptions
@@ -108,10 +108,14 @@ class Storage:
         self.cursor.execute(selecting_0_vertex)
         try:
             id, taxon, num = self.cursor.fetchone()
-            self.cursor.execute(update_vertex_status, [id])
+            self.cursor.execute(update_vertex_status, [1, id])
             return id, taxon, num
         except:
             return None, None, None
+
+    def backup_vertex_status(self, id):
+        self.cursor.execute(update_vertex_status, (0, id))
+        self.save()
 
     def save(self):
         self.conn.commit()

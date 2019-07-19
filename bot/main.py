@@ -35,7 +35,7 @@ def handle_taxa(storage, taxa, taxa_id, text):  # save taxa data, which was give
         storage.update_taxa_description(taxa_id, text)
 
     if storage.min_status == 1:
-        if event.text == "species":
+        if text == "species":
             storage.update_taxa_species(taxa_id, True)
             storage.update_taxa_status(taxa_id, 3)
         else:
@@ -63,7 +63,7 @@ def suicide(vk, storage, user_id):  # that means, all required data is collected
 
 def register_user(vk, cur_users, user_id):  # dynamically create a record about user
     cur_users[user_id] = UserRecord()
-    vk.messages.send(user_id=event.user_id,
+    vk.messages.send(user_id=user_id,
                      message="Здравствуйте, я mayevsky-chatbot, если готовы получить задание, напишите ready",
                      random_id="")
 
@@ -85,7 +85,7 @@ def handle_answer(vk, storage, cur_users, user_id, text):  # save data that user
                      message="спасибо, вы нам очень помогли. Если хотите ещё помочь, начните сначала",
                      random_id="")
 
-    del cur_users[event.user_id]
+    del cur_users[user_id]
 
 
 def ask_data(vk, storage, cur_users, user_id):  # returns True if there is no data to ask
@@ -97,16 +97,30 @@ def ask_data(vk, storage, cur_users, user_id):  # returns True if there is no da
 
         cur_users[user_id].pos = taxa
         cur_users[user_id].pos_id = taxa_id
+        cur_users[user_id].task = storage.min_status
     if storage.min_status == 3:
         vertex_id, taxon, num = storage.shift_vertex()
         if vertex_id is None:
             return True
 
         respond_collecting_vertices(vk, user_id, taxon, num)
-        cur_users[event.user_id].pos = (taxon, num)
-        cur_users[event.user_id].pos_id = vertex_id
+        cur_users[user_id].pos = (taxon, num)
+        cur_users[user_id].pos_id = vertex_id
+        cur_users[user_id].task = "vertex"
 
         return False
+
+
+def backup_record(vk, storage, cur_users, user_id):  # decrements status by id (shifting increments it)
+    if cur_users[user_id].task == "vertex":
+        storage.backup_vertex_status(cur_users[user_id].pos_id)
+    else:
+        storage.update_taxa_status(cur_users[user_id].pos_id, cur_users[user_id].task)
+
+    vk.messages.send(user_id=user_id,
+                     message="во время сохранения данных, которые вы дали произошла ошибка. Чаще всего это происходит\
+                      из-за того, что данные введены неверно",
+                     random_id="")
 
 
 storage = Storage("data.db")
@@ -127,7 +141,10 @@ for event in longpool.listen():
                     break
 
             elif cur_users[event.user_id].status == 1:
-                handle_answer(vk, storage, cur_users, event.user_id, event.text)
+                try:
+                    handle_answer(vk, storage, cur_users, event.user_id, event.text)
+                except:
+                    backup_record(vk, storage, cur_users, event.user_id)
 
         else:
             register_user(vk, cur_users, event.user_id)
