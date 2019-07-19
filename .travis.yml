@@ -3,6 +3,8 @@ python:
 - '3.6'
 script:
 - echo "OK"
+install:
+  pip install .
 deploy:
   provider: script
   script:
