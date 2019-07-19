@@ -9,6 +9,8 @@ script:
   - echo "OK"
 deploy:
  provider:
-    ./deploy.sh
+    script
+ script:
+  - ./deploy.sh
  on:
     branch: master
