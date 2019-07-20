@@ -66,7 +66,7 @@ def suicide(vk, storage, user_id):  # that means, all required data is collected
 def register_user(vk, cur_users, user_id):  # dynamically create a record about user
     cur_users[user_id] = UserRecord()
     vk.messages.send(user_id=user_id,
-                     message="Здравствуйте, я mayevsky-chatbot, если готовы получить задание, напишите ready",
+                     message="Здравствуйте, я mayevsky-chatbot, если готовы получить задание, напишите Ok",
                      random_id="")
 
 
@@ -135,7 +135,7 @@ cur_users = {}
 for event in longpool.listen():
     if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
         if event.user_id in cur_users.keys():
-            if event.text == "ready" and cur_users[event.user_id].status == 0:
+            if event.text == "Ok" and cur_users[event.user_id].status == 0:
                 if ask_data(vk, storage, cur_users, event.user_id):
                     suicide(vk, storage, event.user_id)
                     break
