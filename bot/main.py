@@ -12,8 +12,8 @@ def respond_collecting_taxa(vk, user_id, min_status, taxa):  # give user a task 
                          random_id="")
     if min_status == 1:
         vk.messages.send(user_id=user_id,
-                         message="напишите дочерние таксоны " + taxa + " на латыни, каждый с новой строки и\
-                          заглавной буквы (если этот таксон вид, просто напишите species)",
+                         message="напишите дочерние таксоны " + taxa + " на латыни, каждый с новой строки и заглавной \
+                         буквы (если этот таксон вид, просто напишите species)",
                          random_id="")
     if min_status == 2:
         vk.messages.send(user_id=user_id,
@@ -55,8 +55,10 @@ def handle_vertex(storage, vertex_id, text):  # save vertex data, which was give
 
 def suicide(vk, storage, user_id):  # that means, all required data is collected
     vk.messages.send(user_id=user_id,
-                     message="Хотя нет. Кажется, цель моей жизни достигнута. Теперь я могу спокойно отключиться. \
-                     Кстати, вы единственный, кто увидит это сообщение, гордитесь",
+                     message="Я видел такое, что вам, людям, и не снилось... Атакующие корабли, пылающие над Орионом;\
+                      лучи Си, пронизывающие мрак близ ворот Тангейзера... Все эти мгновения затеряются во времени, как \
+                      слёзы в дожде. Время... умирать (все данные собраны, бот отключается. вы единственный(ая) кто \
+                      получает это сообщение)",
                      random_id="")
     storage.finnish()
 
@@ -84,8 +86,6 @@ def handle_answer(vk, storage, cur_users, user_id, text):  # save data that user
     vk.messages.send(user_id=user_id,
                      message="спасибо, вы нам очень помогли. Если хотите ещё помочь, начните сначала",
                      random_id="")
-
-    del cur_users[user_id]
 
 
 def ask_data(vk, storage, cur_users, user_id):  # returns True if there is no data to ask
@@ -118,8 +118,8 @@ def backup_record(vk, storage, cur_users, user_id):  # decrements status by id (
         storage.update_taxa_status(cur_users[user_id].pos_id, cur_users[user_id].task)
 
     vk.messages.send(user_id=user_id,
-                     message="во время сохранения данных, которые вы дали произошла ошибка. Чаще всего это происходит\
-                      из-за того, что данные введены неверно",
+                     message="во время сохранения данных, которые вы дали, произошла ошибка. Чаще всего это происходит \
+                     из-за того, что данные введены неверно",
                      random_id="")
 
 
@@ -145,6 +145,8 @@ for event in longpool.listen():
                     handle_answer(vk, storage, cur_users, event.user_id, event.text)
                 except:
                     backup_record(vk, storage, cur_users, event.user_id)
+
+                del cur_users[event.user_id]
 
         else:
             register_user(vk, cur_users, event.user_id)
