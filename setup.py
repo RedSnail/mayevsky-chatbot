@@ -6,7 +6,7 @@ install_requires=[
 
 setuptools.setup(
     name="mayevsky-chatbot",
-    version=1.0.0,
+    version="1.0.0",
     setup_requires=['setuptools_scm'],    
     author="RedSnail, SomeAnonimCoder",
     author_email="oleg.demianchenko@gmail.com, glubshev2001@mail.ru",
