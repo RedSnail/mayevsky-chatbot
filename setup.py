@@ -6,7 +6,7 @@ install_requires=[
 
 setuptools.setup(
     name="mayevsky-chatbot",
-    use_scm_version = {"root": "..", "relative_to": __file__},
+    version=1.0.0,
     setup_requires=['setuptools_scm'],    author="RedSnail",
     author_email="",
     description="The bot for TheBigMayevsky",
