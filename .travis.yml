@@ -1,10 +1,17 @@
 language: python
 python:
 - '3.6'
-script:
-- echo "OK"
-install:
-  pip install .
+
+jobs:
+  include:
+    - stage: flake8
+      before_script: pip install flake8
+      script: flake8 bot/
+    - stage: black
+      before_script: pip install black
+      script: black --check bot/
+    - stage: install
+      script: pip install .
 deploy:
   provider: script
   script:
