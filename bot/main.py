@@ -6,6 +6,7 @@ from bot.record import UserRecord
 
 ok_commands = ["ok", "Ok", "OK", "Ок", "ОК", "ок"]
 
+
 def respond_collecting_taxa(vk, user_id, min_status, taxa):  # give user a task to send taxa data
     if min_status == 0:
         vk.messages.send(user_id=user_id,
@@ -124,30 +125,38 @@ def backup_record(vk, storage, cur_users, user_id):  # decrements status by id (
                      random_id="")
 
 
-storage = Storage(os.environ['DB_FILE_NAME'])
+def main(sqlite3_db_path, vk_api_token):
+    storage = Storage(sqlite3_db_path)
 
-storage.push_taxa(".")
+    storage.push_taxa(".")
 
-vk_session = vk_api.VkApi(token=os.environ["VK_API_TOKEN"])
-longpool = VkLongPoll(vk_session)
-vk = vk_session.get_api()
+    vk_session = vk_api.VkApi(token=vk_api_token)
+    longpool = VkLongPoll(vk_session)
+    vk = vk_session.get_api()
 
-cur_users = {}
-for event in longpool.listen():
-    if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
-        if event.user_id in cur_users.keys():
-            if event.text in ok_commands and cur_users[event.user_id].status == 0:
-                if ask_data(vk, storage, cur_users, event.user_id):
-                    suicide(vk, storage, event.user_id)
-                    break
+    cur_users = {}
+    for event in longpool.listen():
+        if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
+            if event.user_id in cur_users.keys():
+                if event.text in ok_commands and cur_users[event.user_id].status == 0:
+                    if ask_data(vk, storage, cur_users, event.user_id):
+                        suicide(vk, storage, event.user_id)
+                        break
 
-            elif cur_users[event.user_id].status == 1:
-                try:
-                    handle_answer(vk, storage, cur_users, event.user_id, event.text)
-                except:
-                    backup_record(vk, storage, cur_users, event.user_id)
+                elif cur_users[event.user_id].status == 1:
+                    try:
+                        handle_answer(vk, storage, cur_users, event.user_id, event.text)
+                    except:
+                        backup_record(vk, storage, cur_users, event.user_id)
 
-                del cur_users[event.user_id]
+                    del cur_users[event.user_id]
 
-        else:
-            register_user(vk, cur_users, event.user_id)
+            else:
+                register_user(vk, cur_users, event.user_id)
+
+
+if __name__ == '__main__':
+    main(
+        sqlite3_db_path=os.environ["DB_FILE_NAME"],
+        vk_api_token=os.environ["VK_API_TOKEN"],
+    )
