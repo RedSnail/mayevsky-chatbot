@@ -123,7 +123,7 @@ def backup_record(vk, storage, cur_users, user_id):  # decrements status by id (
                      random_id="")
 
 
-storage = Storage("data.db")
+storage = Storage(os.environ['DB_FILE_NAME'])
 
 storage.push_taxa(".")
 
