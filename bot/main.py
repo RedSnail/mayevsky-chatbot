@@ -4,8 +4,6 @@ import os
 from bot.bd_interacting import Storage
 from bot.record import UserRecord
 
-ok_commands = ["ok", "Ok", "OK", "Ок", "ОК", "ок"]
-
 
 def respond_collecting_taxa(vk, user_id, min_status, taxa):  # give user a task to send taxa data
     if min_status == 0:
@@ -138,7 +136,7 @@ def main(sqlite3_db_path, vk_api_token):
     for event in longpool.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
             if event.user_id in cur_users.keys():
-                if event.text in ok_commands and cur_users[event.user_id].status == 0:
+                if event.text.lower() in ['ok', 'ок'] and cur_users[event.user_id].status == 0:
                     if ask_data(vk, storage, cur_users, event.user_id):
                         suicide(vk, storage, event.user_id)
                         break
