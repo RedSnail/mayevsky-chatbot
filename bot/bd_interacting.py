@@ -1,14 +1,17 @@
 import sqlite3 as sq
 
-taxa_table_command = '''CREATE TABLE IF NOT EXISTS taxa (
+taxa_table_command = """
+CREATE TABLE IF NOT EXISTS taxa (
     id integer PRIMARY KEY,
     name text,
     description text,
     species bit,
     status integer
-);'''
+)
+"""
 
-description_table_command = '''CREATE TABLE IF NOT EXISTS descriptions (
+description_table_command = """
+CREATE TABLE IF NOT EXISTS descriptions (
     id integer PRIMARY KEY,
     taxon text,
     number integer,
@@ -19,47 +22,57 @@ description_table_command = '''CREATE TABLE IF NOT EXISTS descriptions (
     athesa_num integer,
     athesa_taxon text,
     status integer
-);'''
+)
+"""
 
-taxa_insertion = '''INSERT INTO taxa (name, description, species, status)
-    VALUES(?, ?, ?, 0);
-'''
+taxa_insertion = """
+INSERT INTO taxa (name, description, species, status)
+VALUES(?, ?, ?, 0)
+"""
 
-selecting_0_taxa = '''SELECT id, name from taxa
-                      WHERE status=?
-                      LIMIT 1'''
+selecting_0_taxa = """
+SELECT id, name from taxa WHERE status=? LIMIT 1
+"""
 
-edit_taxa_status = '''UPDATE taxa
-                      SET status=?
-                      WHERE id=?'''
+edit_taxa_status = """
+UPDATE taxa SET status=? WHERE id=?
+"""
 
-edit_taxa_description = '''UPDATE taxa
-                           SET description=?
-                           WHERE id=?'''
+edit_taxa_description = """
+UPDATE taxa SET description=? WHERE id=?
+"""
 
-edit_taxa_species = '''UPDATE taxa
-                       SET species=?
-                       WHERE id=?'''
+edit_taxa_species = """
+UPDATE taxa SET species=? WHERE id=?
+"""
 
-vertex_insertion = '''INSERT INTO descriptions (taxon, number, status)
-                      VALUES(?, ?, 0)'''
+vertex_insertion = """
+INSERT INTO descriptions (taxon, number, status)
+VALUES(?, ?, 0)
+"""
 
-selecting_0_vertex = '''SELECT id, taxon, number from descriptions
-                        WHERE status=0
-                        LIMIT 1'''
+selecting_0_vertex = """
+SELECT id, taxon, number from descriptions
+WHERE status=0
+LIMIT 1
+"""
 
-update_vertex_status = '''UPDATE descriptions
-                          SET status=?
-                          WHERE id=?'''
+update_vertex_status = """
+UPDATE descriptions
+SET status=?
+WHERE id=?
+"""
 
-update_vertex = '''UPDATE descriptions
-                   SET thesa=?,
-                       thesa_num=?,
-                       thesa_taxon=?,
-                       athesa=?,
-                       athesa_num=?,
-                       athesa_taxon=?
-                    WHERE id=?'''
+update_vertex = """
+UPDATE descriptions
+SET thesa=?,
+    thesa_num=?,
+    thesa_taxon=?,
+    athesa=?,
+    athesa_num=?,
+    athesa_taxon=?
+WHERE id=?
+"""
 
 
 class Storage:
@@ -100,7 +113,7 @@ class Storage:
             self.update_taxa_status(id, self.min_status + 1)
 
             return id, name
-        except:
+        except Exception:
             self.min_status += 1
             return self.shift_taxa()
 
@@ -110,7 +123,7 @@ class Storage:
             id, taxon, num = self.cursor.fetchone()
             self.cursor.execute(update_vertex_status, [1, id])
             return id, taxon, num
-        except:
+        except Exception:
             return None, None, None
 
     def backup_vertex_status(self, id):
@@ -122,4 +135,3 @@ class Storage:
 
     def finnish(self):
         self.conn.close()
-
