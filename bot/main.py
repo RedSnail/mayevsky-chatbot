@@ -10,7 +10,8 @@ def respond_collecting_taxa(
 ):  # give user a task to send taxa data
     if min_status == 0:
         vk.messages.send(
-            user_id=user_id, message=f"напишите описание таксона {taxa}", random_id=""
+            user_id=user_id, message=f"напишите описание таксона {taxa}. Если такового в Маевском нет, просто напишите \
+            русское название", random_id=""
         )
     if min_status == 1:
         vk.messages.send(
@@ -39,7 +40,7 @@ def respond_collecting_vertices(
  разделяя переходами на новую строку
 1.текст тезы
 2.номер, развилки, к которой ведёт теза (0 если к дочернему таксону)
-3.Таксон, к которому ведёт теза (любой набор букв, если ведёт к развилке)
+3.Таксон, к которому ведёт теза на латыни с большой буквы (любой набор букв, если ведёт к развилке)
 3.
 5.
 6.
@@ -169,8 +170,6 @@ def backup_record(
 
 def main(sqlite3_db_path, vk_api_token):
     storage = Storage(sqlite3_db_path)
-
-    storage.push_taxa(".")
 
     vk_session = vk_api.VkApi(token=vk_api_token)
     longpool = VkLongPoll(vk_session)
