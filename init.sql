@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS taxa (
+CREATE TABLE taxa (
     id integer PRIMARY KEY,
     name text,
     description text,
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS taxa (
     status integer
 );
 
-CREATE TABLE IF NOT EXISTS descriptions (
+CREATE TABLE descriptions (
     id integer PRIMARY KEY,
     taxon text,
     number integer,
@@ -18,9 +18,6 @@ CREATE TABLE IF NOT EXISTS descriptions (
     athesa_taxon text,
     status integer
 );
-
-DELETE FROM taxa;
-DELETE FROM descriptions;
 
 INSERT INTO taxa (name, species, status)
 VALUES(".", 0, 1);
