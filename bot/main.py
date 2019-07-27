@@ -10,8 +10,10 @@ def respond_collecting_taxa(
 ):  # give user a task to send taxa data
     if min_status == 0:
         vk.messages.send(
-            user_id=user_id, message=f"напишите описание таксона {taxa}. Если такового в Маевском нет, просто напишите \
-            русское название", random_id=""
+            user_id=user_id,
+            message=f"напишите описание таксона {taxa}. Если такового в Маевском нет, просто напишите \
+            русское название",
+            random_id="",
         )
     if min_status == 1:
         vk.messages.send(
