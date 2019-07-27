@@ -1,30 +1,5 @@
 import sqlite3 as sq
 
-taxa_table_command = """
-CREATE TABLE IF NOT EXISTS taxa (
-    id integer PRIMARY KEY,
-    name text,
-    description text,
-    species bit,
-    status integer
-)
-"""
-
-description_table_command = """
-CREATE TABLE IF NOT EXISTS descriptions (
-    id integer PRIMARY KEY,
-    taxon text,
-    number integer,
-    thesa text,
-    thesa_num integer,
-    thesa_taxon text,
-    athesa text,
-    athesa_num integer,
-    athesa_taxon text,
-    status integer
-)
-"""
-
 taxa_insertion = """
 INSERT INTO taxa (name, description, species, status)
 VALUES(?, ?, ?, 0)
@@ -79,8 +54,6 @@ class Storage:
     def __init__(self, db_name):
         self.conn = sq.connect(db_name)
         self.cursor = self.conn.cursor()
-        self.cursor.execute(taxa_table_command)
-        self.cursor.execute(description_table_command)
         self.min_status = 0
 
     def update_taxa_status(self, id, status):

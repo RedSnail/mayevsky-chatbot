@@ -1,12 +1,12 @@
 import setuptools
 
-install_requires=[
+install_requires = [
    'vk_api',
 ]
 
 setuptools.setup(
     name="mayevsky-chatbot",
-    version="1.1.2",
+    version="1.1.3",
     author="RedSnail, SomeAnonimCoder",
     author_email="oleg.demianchenko@gmail.com, glubshev2001@mail.ru",
     description="The bot for TheBigMayevsky(https://github.com/someanonimcoder/thebigmayevsky)",
